@@ -1,27 +1,24 @@
 import { useState } from 'react'
-import NewsSearch from "./jsx/newsSearch.jsx";
-
+import React from "react";
 
 
 function App() {
   const [keyword, setKeyword] = useState('')
     const [search, setSearch] = useState(false)
     const [news, setNews] = useState([])
+    const [choiceLenguageType, setChoiceLenguageType] = useState("en")
+    const [choiceSortBy, setChoiceSortBy] = useState("publishedAt")
+
+    const languageTypes = ["en", "ar", "de", "es", "fr", "he", "it", "nl", "no", "pt", "sv", "ud", "zh"]
+    const sortBy = ["publishedAt", "relevancy", "popularity"]
 
     async function getNews(keyword) {
        if (!keyword) return;
-        console.log('pobieram wiadomości')
-      const response = await fetch(`https://newsapi.org/v2/everything?q=${keyword}&from=2023-04-24&sortBy=publishedAt&apiKey=febb218de5d54005984fe62f862fd800`);
+      const response = await fetch(`https://newsapi.org/v2/everything?q=${keyword}&language=${choiceLenguageType}&from=2023-04-24&sortBy=${choiceSortBy}&apiKey=febb218de5d54005984fe62f862fd800`);
       const data = response.json()
         data.then((result) => {
-            console.log(result.articles.length);
-            // result.articles.map((article) => {setNews((prev) => [...prev, article])
-            console.log(result.articles[0])
-        // });
             setNews(result.articles);
             setSearch(true);
-            // setSearch(result.articles[0].title);
-            // console.log('NEWS: ' + news.length);
         });
 
         return data;
@@ -30,9 +27,10 @@ const ShowInformation = ({info, idx}) => {
       return (<>
           <section className="infoBox" key={idx}>
               <div className="infoBox_left">
-                  <p  className="infoBox__section">by: {info.author} | date: {info.publishedAt}</p>
-                  <p  className="infoBox__section">{info.title}</p>
-                  <p  className="infoBox__section">{info.content}</p>
+                  <p className="infoBox__section">by: {info.author} | date: {info.publishedAt}</p>
+                  <p className="infoBox__section">{info.title}</p>
+                  <p className="infoBox__section">{info.content}</p>
+                  <a className="infoBox__section" href={info.url} target="_blank"> more info...</a>
               </div>
               <div className="infoBox__img-container">
                   <img src={info.urlToImage} alt={info.title} className="infoBox__img" />
@@ -44,36 +42,50 @@ const ShowInformation = ({info, idx}) => {
           </>)
 }
 const ShowInfo = () => {
-        console.log(news)
       return (<>
           <p>result: {news.length}</p>
           {news.map((info,idx) => <ShowInformation info = {info} idx = {idx}/> )}</>)
 }
 
 
-
   return (
     <>
         <div className="mainDiv">
             <div className="headerBox">
-            <h1>newsScanner</h1>
+                <h1>newsScanner</h1>
 
-            <input
-                type="text"
-                name="subject"
-                className="mainInput"
-                onChange={(event) => setKeyword(event.target.value)}
-                value={keyword}
-                placeholder="_"/>
-            <button type="submit" onClick={() => getNews(keyword)}>enter</button>
-            {/*<button type="submit" onClick={() => setSearch(true)}>enter</button>*/}
+                <input
+                    type="text"
+                    name="subject"
+                    className="mainInput"
+                    onChange={(event) => setKeyword(event.target.value)}
+                    value={keyword}
+                    placeholder="..."/>
+                <button type="submit" onClick={() => getNews(keyword)}>enter</button>
             </div>
-            {(search ? <ShowInfo/> : <p>none</p>)}
-
-                {/*<p>{news[0].title}</p>) */}
+            <section className="underHeader">
+                <p>choose lenguage</p>
+                <select value={choiceLenguageType} onChange={() => setChoiceLenguageType(event.target.value)} className="fnt box_input" >
+                    {languageTypes.map((languageType) => (
+                        <option key={languageType} value={languageType} className="fnt">
+                            {languageType}
+                        </option>
+                    ))}
+                </select>
+                <p>sort</p>
+                <select value={choiceSortBy} onChange={() => setChoiceSortBy(event.target.value)} className="fnt box_input" >
+                    {sortBy.map((sortType) => (
+                        <option key={sortType} value={sortType} className="fnt">
+                            {sortType}
+                        </option>
+                    ))}
+                </select>
+            </section>
+            <section>
+                {(search ? <ShowInfo/> : <></>)}
+            </section>
 
         </div>
-        {/*{(search ? <NewsSearch keyword={keyword} /> : <></>)}*/}
 
     </>
   )

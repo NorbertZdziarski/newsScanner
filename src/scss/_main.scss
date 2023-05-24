@@ -10,7 +10,7 @@
 }
 
 .headerBox {
-
+  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -20,6 +20,18 @@ h1 {
   font-size: 50px;
   font-weight: 700;
   color: #0b335b;
+}
+
+.underHeader {
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  margin-inline: auto;
+}
+
+.fnt {
+  color: dodgerblue;
 }
 
 .mainInput {
@@ -36,7 +48,15 @@ h1 {
 
 }
 
+.box_input {
+ width: 300px;
+  height: 20px;
+  color: rgba(23, 23, 23, 0.75);
+  margin-inline: auto;
+}
+
 .infoBox {
+
   box-sizing: border-box;
   width: 90%;
   height: 274px;
@@ -58,6 +78,7 @@ h1 {
   width: 100%;
   padding: 3px;
   border-bottom: 1px dashed lightgrey;
+  margin-bottom: 10px;
 }
 .infoBox__img-container {
   width: 250px;
